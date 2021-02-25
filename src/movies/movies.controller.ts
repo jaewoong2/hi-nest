@@ -1,3 +1,5 @@
+import { UpdateMovieDto } from './dto/update.movie.dto';
+import { CreateMovieDTO } from './dto/create-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 import {
@@ -13,9 +15,11 @@ import {
   Query,
 } from '@nestjs/common';
 
+// movies 라우터, root/moives 의 주소값을 갖는다.
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
+  // movieservice에 있는 메소드(?) 들을 사용 할 수 있게 설정함
 
   @Get()
   getAll(): Movie[] {
@@ -33,18 +37,18 @@ export class MoviesController {
   // Params를 쓰는 게 있으면 맨 밑으로 가야한다.
   //  그래야 다른 / 주소 값을 사용할 수 있음
   @Get('/:id')
-  getOne(@Param('id') movieId: string): Movie {
+  getOne(@Param('id') movieId: number): Movie {
     const movie = this.moviesService.getOne(movieId);
     return movie;
   }
 
   @Post()
-  create(@Body() movieData) {
+  create(@Body() movieData: CreateMovieDTO) {
     return this.moviesService.create(movieData);
   }
 
   @Delete('/:id')
-  remove(@Param('id') moiveId: string) {
+  remove(@Param('id') moiveId: number) {
     return this.moviesService.deleteOne(moiveId);
   }
 
@@ -53,7 +57,7 @@ export class MoviesController {
 
   //   일부분
   @Patch(':id')
-  path(@Param('id') moiveId: string, @Body() updateData) {
+  path(@Param('id') moiveId: number, @Body() updateData: UpdateMovieDto) {
     return this.moviesService.update(moiveId, updateData);
   }
 }
